@@ -1,7 +1,5 @@
 const { validateCron, validateTime } = require('./validate.js');
-
-const ASTERIX = '*';
-const ZERO_MINS = '00';
+const { ASTERIX, ZERO_MINS } = require('./constants.js');
 
 class CronTab {
     constructor(cron) {
