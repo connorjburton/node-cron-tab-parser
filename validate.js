@@ -7,8 +7,8 @@ module.exports = {
             return false;
         }
 
-        const split = date.split(':');
-        return split.length === 2 && parseInt(split[0]) <= 23 && parseInt(split[1]) <= 59;
+        const [hours, minutes] = date.split(':');
+        return parseInt(hours[0]) <= 23 && parseInt(minutes[1]) <= 59;
     },
     validateCron: cron => /^([\d][\d]?|\*) ([\d][\d]?|\*) (\/[\w\/\\\-_]+)$/.test(cron) // [0]
 };

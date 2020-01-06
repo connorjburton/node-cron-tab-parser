@@ -1,6 +1,7 @@
 const { validateCron, validateTime } = require('./validate.js');
 
 const ASTERIX = '*';
+const ZERO_MINS = '00';
 
 class CronTab {
     constructor(cron) {
@@ -18,6 +19,7 @@ class CronTab {
     }
 
     setProperties(cron) {
+        // would be nice if you could destructure arrays onto class properties but you can't
         const split = cron.split(' ');
         this.minutes = split[0];
         this.hours = split[1];
@@ -38,7 +40,7 @@ class CronTab {
 
     getNextExecutionMinute(currentMinutes) {
         if (this.hours !== ASTERIX && this.minutes === ASTERIX) {
-            return '00';
+            return ZERO_MINS;
         }
 
         return this.minutes === ASTERIX ? currentMinutes : this.minutes;

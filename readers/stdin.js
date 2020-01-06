@@ -1,10 +1,9 @@
 const os = require('os');
 const stream = require('stream');
-const readline = require('readline');
 
-class StdinReader {
+class StdinReader { // would be nice to have TypeScript-like interfaces here
     constructor() {
-        if (!(process.stdin instanceof stream.Readable)) {
+        if (!(process.stdin instanceof stream.Readable)) { // unsure if process.stdin can be anything but stream.Readable but added this just in-case
             throw new TypeError('stdin not instance of stream.Readable in StdinReader#constructor');
         }
 
