@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}\\index.js",
-            "args": ["11:11", "<", "config"]
+            "args": ["16:10", "<", "./config"]
         }
     ]
 }
