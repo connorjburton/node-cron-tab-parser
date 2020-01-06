@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-const StdinReader = require('./readers/stdin.js');
+const StreamReader = require('./readers/stream.js');
 const CronTab = require('./cronTab.js');
 
-new StdinReader().toArray().then(crons => {
+new StreamReader(process.stdin).toArray().then(crons => {
     crons.forEach(cron => {
         // don't like hardcoding argv[2], as you can run this with and without the node command, so should really support that
         const nextExecutionTime = (new CronTab(cron)).getNextExecutionTime(process.argv[2]);

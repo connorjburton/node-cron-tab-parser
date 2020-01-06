@@ -23,4 +23,4 @@ Unix: `./index.js 11:11 < config`. Note env location at the top of `index.js`
 
 1. There was nothing in the spec to dictate what should happen if an invalid `CronTab` is passed, however I didn't think exiting the process is suitable. My opinion is this tool is something a SysAdmin may use to check when a `CronTab` will next run, and I don't think exiting the process because one isn't syntactically correct is helpful.
 2. The design was to keep everything as de-coupled as possible. Dependency injection would be an option if we were to add an outputter.
-3. 100% code coverage, run `npm install && npm run test`
+3. There are tests, run `npm install && npm run test`

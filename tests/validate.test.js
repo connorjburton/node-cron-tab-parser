@@ -6,8 +6,8 @@ describe('validate', () => {
         expect(validateTime('11:11')).toBe(true);
         expect(validateTime('23:59')).toBe(true);
         expect(validateTime('01:04')).toBe(true);
-        expect(validateTime('01:b4')).toBe(true);
-        expect(validateTime('a1:b4')).toBe(true);
+        expect(validateTime('01:b4')).toBe(false);
+        expect(validateTime('a1:b4')).toBe(false);
     });
 
     test('validateCron', () => {
