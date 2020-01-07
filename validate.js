@@ -12,7 +12,7 @@ module.exports = {
     validateCron: cron => {
         // dont like the last group, it doesn't take into account all the different characters a path could have
         // maybe a better alternative is to let any chars through and if an execute was implemented let it fail then
-        if (!/^([\d][\d]?|\*) ([\d][\d]?|\*) (\/[\w\/\\\-_]+)$/.test(cron)) {
+        if (!/^([\d][\d]?|\*) ([\d][\d]?|\*) (\/[\w\/\\\-_0-9]+)$/.test(cron)) {
             return false;
         }
 
