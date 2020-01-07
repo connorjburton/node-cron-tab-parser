@@ -1,5 +1,5 @@
 const { validateCron, validateTime } = require('./validate.js');
-const { ASTERIX, DOUBLE_ZEROS } = require('./constants.js');
+const { ASTERIX, DOUBLE_ZEROS, LAST_HOUR } = require('./constants.js');
 
 class CronTab {
     constructor(cron) {
@@ -34,23 +34,33 @@ class CronTab {
             return true;
         }
 
+        const parsedCurrentHours = parseInt(currentHours, 10);
+        const parsedCurrentMinutes = parseInt(currentMinutes, 10);
+        const parsedMinutes = parseInt(this.minutes, 10);
+        const parsedHours = parseInt(this.hours, 10);
+
         if (this.hours === ASTERIX) {
             // if last hour of day, don't go into next day
-            return parseInt(currentMinutes, 10) <= parseInt(this.minutes, 10) || parseInt(currentHours, 10) !== 23;
+            return parsedCurrentMinutes <= parsedMinutes || parsedCurrentHours !== LAST_HOUR;
         }
 
-        if (this.minutes === ASTERIX && parseInt(this.hours, 10) >= parseInt(currentHours, 10)) {
-            return true;
+        if (this.minutes === ASTERIX) {
+            return parsedHours >= parsedCurrentHours;
         }
 
-        return parseInt(this.hours, 10) >= parseInt(currentHours, 10) && parseInt(this.minutes, 10) >= parseInt(currentMinutes, 10);
+        return parsedHours >= parsedCurrentHours && parsedMinutes >= parsedCurrentMinutes;
     }
 
+    // looking back on this, getNextExecutionHour and getNextExecutionMinute could of been 1 function
     getNextExecutionHour(currentHours, currentMinutes) {
-        // a little ugly parsing int and casting back to string, but it's to get numbers < 10 consistent
+        // a little ugly parsing int and casting back to string, but it's to get numbers < 10 consistently formatted
         if (this.hours === ASTERIX) {
-            const newCurrentHours = parseInt(currentMinutes, 10) > this.minutes ? parseInt(currentHours, 10) + 1 : parseInt(currentHours, 10);
-            return newCurrentHours > 23 ? DOUBLE_ZEROS : String(newCurrentHours);
+            const parsedCurrentHours = parseInt(currentHours, 10);
+            const parsedCurrentMinutes = parseInt(currentMinutes, 10);
+            const parsedMinutes = parseInt(this.minutes, 10);
+
+            const newCurrentHours = parsedCurrentMinutes > parsedMinutes ? parsedCurrentHours + 1 : parsedCurrentHours;
+            return newCurrentHours > LAST_HOUR ? DOUBLE_ZEROS : String(newCurrentHours);
         }
 
         return this.hours;
