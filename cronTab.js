@@ -53,21 +53,25 @@ class CronTab {
 
     // looking back on this, getNextExecutionHour and getNextExecutionMinute could of been 1 function
     getNextExecutionHour(currentHours, currentMinutes) {
-        // a little ugly parsing int and casting back to string, but it's to get numbers < 10 consistently formatted
-        if (this.hours === ASTERIX) {
-            const parsedCurrentHours = parseInt(currentHours, 10);
-            const parsedCurrentMinutes = parseInt(currentMinutes, 10);
-            const parsedMinutes = parseInt(this.minutes, 10);
-
-            const newCurrentHours = parsedCurrentMinutes > parsedMinutes ? parsedCurrentHours + 1 : parsedCurrentHours;
-            return newCurrentHours > LAST_HOUR ? DOUBLE_ZEROS : String(newCurrentHours);
+        if (this.hours !== ASTERIX) {
+            return this.hours;
         }
 
-        return this.hours;
+        const parsedCurrentHours = parseInt(currentHours, 10);
+        const parsedCurrentMinutes = parseInt(currentMinutes, 10);
+        const parsedMinutes = parseInt(this.minutes, 10);
+
+        // if its any hour but we are past the minute in crontab then it'll run next hour
+        // otherwise we will run this hour. Also overflow to 00 if we go into the next day
+        const newCurrentHours = parsedCurrentMinutes > parsedMinutes ? parsedCurrentHours + 1 : parsedCurrentHours;
+        // a little ugly parsing int and casting back to string, but it's to get numbers < 10 consistently formatted
+        return newCurrentHours > LAST_HOUR ? DOUBLE_ZEROS : String(newCurrentHours);
     }
 
     getNextExecutionMinute(currentHours, currentMinutes) {
         if (this.hours !== ASTERIX && this.minutes === ASTERIX) {
+            // if it runs every minute of a specific hour, we are either going to run now if we are in the hour specified,
+            // or tomorrow at the start of the hour
             return currentHours === this.hours ? currentMinutes : DOUBLE_ZEROS;
         }
 
