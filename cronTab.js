@@ -1,5 +1,5 @@
 const { validateCron, validateTime } = require('./validate.js');
-const { ASTERIX, DOUBLE_ZEROS, LAST_HOUR } = require('./constants.js');
+const { ASTERIX, SINGLE_ZERO, DOUBLE_ZEROS, LAST_HOUR } = require('./constants.js');
 
 class CronTab {
     constructor(cron) {
@@ -29,7 +29,7 @@ class CronTab {
     }
 
     willRunToday(currentHours, currentMinutes) {
-        // if both asterix not matter the time or crontab values it will always run
+        // if both asterix not matter the time or crontab values it will always run today
         if (this.hours === ASTERIX && this.minutes === ASTERIX) {
             return true;
         }
@@ -54,7 +54,7 @@ class CronTab {
     // looking back on this, getNextExecutionHour and getNextExecutionMinute could of been 1 function
     getNextExecutionHour(currentHours, currentMinutes) {
         if (this.hours !== ASTERIX) {
-            return this.hours;
+            return String(parseInt(this.hours, 10));
         }
 
         const parsedCurrentHours = parseInt(currentHours, 10);
@@ -65,7 +65,7 @@ class CronTab {
         // otherwise we will run this hour. Also overflow to 00 if we go into the next day
         const newCurrentHours = parsedCurrentMinutes > parsedMinutes ? parsedCurrentHours + 1 : parsedCurrentHours;
         // a little ugly parsing int and casting back to string, but it's to get numbers < 10 consistently formatted
-        return newCurrentHours > LAST_HOUR ? DOUBLE_ZEROS : String(newCurrentHours);
+        return newCurrentHours > LAST_HOUR ? SINGLE_ZERO : String(newCurrentHours);
     }
 
     getNextExecutionMinute(currentHours, currentMinutes) {
@@ -91,6 +91,7 @@ class CronTab {
         const [currentHours, currentMinutes] = time.split(':');
         const day = this.willRunToday(currentHours, currentMinutes) ? 'today' : 'tomorrow';
 
+        // if we have * * in crobtab we could get away with just returning the same time, if we had 1 function instead of 2 here that would be easier to do
         return `${this.getNextExecutionHour(currentHours, currentMinutes)}:${this.getNextExecutionMinute(currentHours, currentMinutes)} ${day} - ${this.execute}`;
     }
 }

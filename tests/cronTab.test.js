@@ -239,7 +239,7 @@ describe('CronTab', () => {
             expect(cronTab.getNextExecutionTime('18:11')).toBe('19:05 today - /bin/run_me_every_hour_at_five_minutes_past');
             expect(cronTab.getNextExecutionTime('20:00')).toBe('20:05 today - /bin/run_me_every_hour_at_five_minutes_past');
             expect(cronTab.getNextExecutionTime('11:11')).toBe('12:05 today - /bin/run_me_every_hour_at_five_minutes_past');
-            expect(cronTab.getNextExecutionTime('23:59')).toBe('00:05 tomorrow - /bin/run_me_every_hour_at_five_minutes_past');
+            expect(cronTab.getNextExecutionTime('23:59')).toBe('0:05 tomorrow - /bin/run_me_every_hour_at_five_minutes_past');
         });
 
         test('* * /bin/run_every_minute', () => {
@@ -249,6 +249,7 @@ describe('CronTab', () => {
             expect(cronTab.getNextExecutionTime('20:00')).toBe('20:00 today - /bin/run_every_minute');
             expect(cronTab.getNextExecutionTime('11:11')).toBe('11:11 today - /bin/run_every_minute');
             expect(cronTab.getNextExecutionTime('23:59')).toBe('23:59 today - /bin/run_every_minute');
+            expect(cronTab.getNextExecutionTime('00:00')).toBe('0:00 today - /bin/run_every_minute');
         });
 
         test('23 15 /bin/run_23_of_15', () => {
@@ -258,6 +259,16 @@ describe('CronTab', () => {
             expect(cronTab.getNextExecutionTime('20:00')).toBe('15:23 tomorrow - /bin/run_23_of_15');
             expect(cronTab.getNextExecutionTime('11:11')).toBe('15:23 today - /bin/run_23_of_15');
             expect(cronTab.getNextExecutionTime('23:59')).toBe('15:23 tomorrow - /bin/run_23_of_15');
+        });
+
+        test('00 03 /bin/run_3_minutes_past_midnight', () => {
+            const cronTab = new CronTab('03 00 /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('00:00')).toBe('0:03 today - /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('01:05')).toBe('0:03 tomorrow - /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('18:11')).toBe('0:03 tomorrow - /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('20:00')).toBe('0:03 tomorrow - /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('11:11')).toBe('0:03 tomorrow - /bin/run_3_minutes_past_midnight');
+            expect(cronTab.getNextExecutionTime('23:59')).toBe('0:03 tomorrow - /bin/run_3_minutes_past_midnight');
         });
     });
 });
