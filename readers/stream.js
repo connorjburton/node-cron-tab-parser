@@ -8,7 +8,7 @@ class StreamReader { // would be nice to have TypeScript-like interfaces here
         }
 
         this.streamInput = streamInput;
-        this.streamInput.setEncoding('utf8');
+        this.streamInput.setEncoding('utf8'); // making an assumption on utf8 here, not given too much thought about alternatives here
     }
 
     toArray() {
@@ -17,7 +17,8 @@ class StreamReader { // would be nice to have TypeScript-like interfaces here
 
             this.streamInput.on('error', reject);
             this.streamInput.on('data', chunk => contents += chunk);
-            this.streamInput.on('end', () => resolve(contents.split(os.EOL)));
+            // split on the running environments EOL and filter out any empty array values
+            this.streamInput.on('end', () => resolve(contents.split(os.EOL).filter(Boolean)));
         });
     }
 }

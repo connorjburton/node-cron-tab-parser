@@ -1,4 +1,4 @@
 module.exports = {
     ASTERIX: '*',
-    ZERO_MINS: '00'
+    DOUBLE_ZEROS: '00'
 }
