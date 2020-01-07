@@ -9,8 +9,11 @@ past.
 Examples of the the scheduler config:
 
 `30 1 /bin/run_me_daily`
+
 `45 * /bin/run_me_hourly`
+
 `* * /bin/run_me_every_minute`
+
 `* 19 /bin/run_me_sixty_times`
 
 The first field is the minute past the hour, the second field is the hour of the day and the third is
@@ -29,8 +32,11 @@ For example given the above examples as input and the simulated 'current time' c
 argument 16:10 the output should be:
 
 `1:30 tomorrow - /bin/run_me_daily`
+
 `16:45 today - /bin/run_me_hourly`
+
 `16:10 today - /bin/run_me_every_minute`
+
 `19:00 today - /bin/run_me_sixty_times`
 
 # Prerequisites
